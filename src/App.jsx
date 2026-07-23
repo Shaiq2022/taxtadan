@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import CategoryPage from './CategoryPage'; // Yeni yaradacağımız kateqoriya səhifəsi
-import AdminPanel from './adminPanel';     // Admin paneli
+import AdminPanel from "./AdminPanel";   // Admin paneli
 
 function App() {
   return (
