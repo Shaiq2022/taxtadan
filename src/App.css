@@ -1,0 +1,522 @@
+/* Ümumi tənzimləmələr */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fcfbfa;
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-links a:hover {
+  color: #b8860b;
+}
+.order-btn {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f5f0ea 0%, #e6dfd5 100%);
+}
+.hero-title {
+  font-size: 38px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+.hero-subtitle {
+  font-size: 18px;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45); /* Videonun üstünə tünd pərdə */
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-section-content {
+  position: relative;
+  z-index: 3;              
+  color: #ffffff;          
+  text-align: center;
+  max-width: 800px;        
+  padding: 0 30px;
+}
+
+.video-section-content h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Yazıya dərinlik qatır */
+}
+
+.video-section-content p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #f1f2f6;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Mobil telefonlar üçün uyğunlaşdırma (Responsivlik) */
+@media (max-width: 768px) {
+  .video-section {
+    min-height: 400px; /* Mobil ekranda hündürlüyü bir qədər azaldırıq ki, tam otursun */
+  }
+  .video-section-content h2 {
+    font-size: 28px;
+  }
+  .video-section-content p {
+    font-size: 15px;
+  }
+}
+.promo-video {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Məhsullar GRID Sistemi */
+.products-section {
+  padding: 60px 50px;
+  background-color: #f5f2ed;
+}
+.section-title {
+  text-align: center;
+  font-size: 30px;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Elementləri ekrana görə avtomatik qruplayır */
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.product-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s;
+  text-align: center;
+  padding-bottom: 20px;
+}
+.product-card:hover {
+  transform: translateY(-5px); /* Siçan üzərinə gələndə kart yüngülcə qalxır */
+}
+.product-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover; /* Şəkilləri kartın içinə mükəmməl sığdırır */
+}
+.product-card h4 {
+  font-size: 20px;
+  margin: 15px 0 10px 0;
+  color: #2c3e50;
+}
+.product-card p {
+  padding: 0 15px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+}
+/* Səhifənin yumşaq sürüşməsi üçün (Smooth Scroll) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Əvvəlki CSS kodlarının hamısı olduğu kimi qalır, sadəcə ən aşağısına bunları əlavə et: */
+
+/* Footer / Əlaqə Bölməsi */
+
+/* ========================================================
+   YENİ EFFEKT: VİDEO PARALLAX VƏ FOOTER BÖLMƏSİ (ƏN AŞAĞIYA ƏLAVƏ ET)
+   ======================================================== */
+
+/* Video və Footer üçün ortaq pəncərə effekti */
+/* --- VİDEO SEKSİYALARININ ÜMUMİ AYARLARI --- */
+.video-section, .footer-section {
+  position: relative;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0); 
+}
+
+/* --- 1. ORTA SEKSİYA (VİDEO BANNER) --- */
+.video-section {
+  width: 100%;
+  height: 320px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.video-section .video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.video-section-content {
+  text-align: center;
+  color: white;
+  padding: 0 20px;
+  max-width: 800px;
+}
+
+.video-section-content h2 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+.video-section-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+/* --- 2. AŞAĞI SEKSİYA (FOOTER VƏ SİFARİŞ FORMASI) --- */
+.footer-section {
+  width: 100%;
+  display: block;
+}
+
+.footer-section, #contact {
+  background: transparent !important; 
+  background-color: transparent !important;
+  padding: 0;
+}
+
+/* Hər iki videonu ekrana kilidləyib parallax effekti yaradırıq */
+.video-section .bg-video,
+.footer-section .bg-video {
+  position: fixed;       /* Video ekrana kilidli qalır */
+  top: 0;
+  left: 0;
+  width: 100vw;          /* Ekranın tam eni */
+  height: 100vh;         /* Ekranın tam hündürlüyü */
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;  /* Videonun düymələrə klikləməyə mane olmasının qarşısını alır */
+}
+
+.footer-overlay {
+  position: relative;
+  z-index: 2;
+  background: rgba(44, 62, 80, 0.85); 
+  width: 100%;
+  height: 100%;
+  padding: 80px 0;
+}
+
+.bg-video {
+  max-height: none !important;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  gap: 40px;
+}
+
+.footer-info, .footer-form {
+  flex: 1;
+}
+
+.footer-info h4, .footer-form h4 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #f39c12;
+}
+
+.footer-info p {
+  margin: 12px 0;
+  font-size: 16px;
+  color: #bdc3c7;
+}
+
+.footer-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.footer-form input, .footer-form textarea {
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #34495e;
+  background-color: #34495e;
+  color: white;
+  font-size: 14px;
+}
+
+/* --- 3. MODAL DAXİLİNDƏKİ FƏRDİ SEÇİM PANELİ --- */
+.modal-customization {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+}
+
+.custom-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.custom-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.custom-group select, 
+.custom-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #dcdde1;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  outline: none;
+  box-sizing: border-box; /* Ölçülərin kənara çıxmaması üçün */
+  transition: all 0.25s ease;
+}
+
+.custom-group select:focus, 
+.custom-group input:focus {
+  border-color: #f39c12;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(243, 156, 18, 0.2);
+}
+.send-btn {
+  background-color: #f39c12;
+  color: #2c3e50;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.send-btn:hover {
+  background-color: #e67e22;
+}
+/* ƏN AŞAĞIDAKI COPYRIGHT ZOLAĞI */
+.footer-bottom {
+  background-color: #1a252f; /* Tam bərk, tünd rəng (video bura keçmir) */
+  color: #bdc3c7;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.08); /* İncə ayırıcı xətt */
+  position: relative;
+  z-index: 3;
+}
+.footer-bottom {
+  text-align: center;
+  margin-top: 50px;
+  border-top: 1px solid #34495e;
+  padding-top: 20px;
+  font-size: 14px;
+  color: #7f8c8d;
+}
+.modal-card {
+  background-color: #fff;
+  border-radius: 12px;
+  max-width: 580px;         /* Modalı ümumi olaraq bir az kiçiltdik (700px idi) */
+  width: 100%;
+  height: 380px;            /* Sabit hündürlük verdik ki, şəkil aşağı doğru uzanmasın */
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: fadeInModal 0.3s ease-out;
+}
+
+.modal-img {
+  width: 40%;               /* Şəklin enini bir az azaltdıq */
+  height: 100%;             /* Hündürlüyü modalın hündürlüyünə (380px) bərabərləşdirdik */
+  object-fit: cover;        /* Şəkil əyilmədən, kəsilərək qutuya tam sığacaq */
+}
+
+.modal-info {
+  padding: 30px 25px;
+  width: 60%;               /* Yazı hissəsinə daha çox yer ayırdıq */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Düyməni avtomatik ən aşağıya nizamlayır */
+}
+/* --- KATEQORİYA SƏHİFƏSİ DİZAYNI --- */
+.category-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 80vh;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #f1f2f6;
+  padding-bottom: 20px;
+}
+
+.category-header h2 {
+  font-size: 28px;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.back-to-home-btn {
+  padding: 10px 20px;
+  background-color: #34495e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.back-to-home-btn:hover {
+  background-color: #2c3e50;
+}
+
+/* Məhsulların yan-yana düzülüş toru (Grid) */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.product-item-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.product-item-img {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+}
+
+.product-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-item-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-item-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+.product-item-info p {
+  color: #7f8c8d;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.order-now-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s;
+}
+
+.order-now-btn:hover {
+  background-color: #27ae60;
+}
+
+.loading-box, .no-products {
+  text-align: center;
+  font-size: 18px;
+  color: #7f8c8d;
+  margin-top: 50px;
+}
