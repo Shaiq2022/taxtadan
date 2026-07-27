@@ -33,6 +33,37 @@ html, body {
     font-size: 0.9rem;
     padding: 0 15px;
   }
+  .footer-container {
+    display: flex !important;
+    flex-direction: column !important; /* Yan-yana yox, alt-alta yığır */
+    gap: 30px !important; /* İki blok arasında məsafə */
+    padding: 20px 15px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Məlumatlar və Forma bloklarının hər biri ekranı tam tutsun */
+  .footer-info, 
+  .footer-form {
+    width: 100% !important;
+    text-align: center !important; /* Mobildə yazıları mərkəzə yığmaq daha qəşəng görünür */
+  }
+
+  /* Formanın içindəki input və düymələr ekrandan daşmasın */
+  .footer-form input,
+  .footer-form textarea,
+  .footer-form button {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Məlumat hissəsindəki ikonların mərkəzləşməsi üçün */
+  .footer-info p {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
 }
 body {
   margin: 0;
