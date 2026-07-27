@@ -1,4 +1,39 @@
 /* Ümumi tənzimləmələr */
+/* Mobil ekranda sağa-sola daşmanın qarşısını alır */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Mobil cihazlar üçün Navbar tənzimləməsi */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Mobil ekranda dörd yazı yan-yana sığmadığı üçün onları gizlədirik */
+  .nav-links {
+    display: none;
+  }
+
+  .order-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+    padding: 0 10px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    padding: 0 15px;
+  }
+}
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

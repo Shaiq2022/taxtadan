@@ -1,53 +1,36 @@
 import './App.css';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Link import edildi
 
 function Home() {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderMessage, setOrderMessage] = useState('');
+  
   // Fərdi seçim paneli üçün state-lər
   const [productSize, setProductSize] = useState('A5 (Standart)');
   const [materialType, setMaterialType] = useState('Tam Təbii Taxta');
   const [customText, setCustomText] = useState('');
 
-  // Sifariş düyməsinə klikləyəndə fərdi seçimləri formaya ötürən funksiya
- // Sifariş düyməsinə klikləyəndə fərdi seçimləri formaya ötürən funksiya
- const handleOrderClick = (title) => {
-  // Müştərinin yazdığı ünvan əsasında Google Maps linki yaradırıq
-  const mapsLink = address ? `https://maps.google.com/?q=${encodeURIComponent(address)}` : '';
+  const handleOrderClick = (title) => {
+    let message = `Salam! *Taxtadan.az* saytından sifariş etmək istəyirəm:\n\n`;
+    message += `🔨 *Məhsul:* ${title}\n`;
+    message += `📐 *İstədiyiniz Ölçü:* ${productSize}\n`;
+    message += `🌲 *İstifadə olunacaq material:* ${materialType}\n`;
+    message += `✍️ *Üzərində yazılacaq mətn:* ${customText}\n\n`;
+    message += `Zəhmət olmasa sifarişi qəbul edin.`;
 
-  // Dinamik mesaj (mapsLink ayrı sətirdə olanda WhatsApp xəritə önizləməsini daha rahat aktiv edir)
-  // WhatsApp mesaj mətni
-let message = `Salam! *Taxtadan.az* saytından sifariş etmək istəyirəm:\n\n`;
-message += `🔨 *Məhsul:* ${productName}\n`;
-message += `📐 *İstədiyiniz Ölçü:* ${selectedSize}\n`;
-message += `🌲 *İstifadə olunacaq material:* ${selectedMaterial}\n`;
-message += `📍 *Çatdırılma Ünvanı:* ${addressText}\n`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=994707166863&text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    setSelectedProduct(null); 
+    setProductSize('A5 (Standart)');
+    setMaterialType('Tam Təbii Taxta');
+    setCustomText('');
 
-// Xəritə linkini ayrı, təmiz sətirdə göstəririk:
-if (mapUrl) {
-  message += `🗺️ *Xəritədə konumu:* ${mapUrl}\n`;
-}
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-message += `✍️ *Üzərində yazılacaq mətn:* ${customText}\n\n`;
-message += `Zəhmət olmasa sifarişi qəbul edin.`;
-
-// WhatsApp linkini hazırlayırıq
-const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-  
-  setOrderMessage(detailedMessage);
-  setSelectedProduct(null); 
-  
-  // State-ləri sıfırlayırıq
-  setProductSize('40x60');
-  setMaterialType('Palıd taxtası (Premium Əl işləri üçün)');
-  setCustomText('');
-  setAddress('');
-
-  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-};
   return (
     <div>
       {/* 1. Naviqasiya Menyusu */}
@@ -113,7 +96,7 @@ const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${en
         </div>
       </section>
 
-      {/* POP-UP MODAL PƏNCƏRƏSİ (TAM ƏVVƏLKİ VƏZİYYƏTİNƏ QAYIDAN) */}
+      {/* POP-UP MODAL PƏNCƏRƏSİ */}
       {selectedProduct && (
         <div className="modal-backdrop" onClick={() => setSelectedProduct(null)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
@@ -123,7 +106,6 @@ const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${en
               <h3>{selectedProduct.title}</h3>
               <p className="modal-desc">{selectedProduct.desc}</p>
               
-              {/* --- FƏRDİ SEÇİM FORMLARI --- */}
               <div className="modal-customization">
                 <div className="custom-group">
                   <label>Ölçü seçin:</label>
@@ -162,7 +144,7 @@ const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${en
         </div>
       )}
 
-      {/* 5. Əlaqə və Sonluq (Footer) Bölməsi (TAM ƏVVƏLKİ VƏZİYYƏTİNƏ QAYIDAN) */}
+      {/* 5. Əlaqə və Sonluq (Footer) Bölməsi */}
       <footer className="footer-section" id="contact">
         <video className="bg-video" src="/woodpeckerai.mp4" autoPlay loop muted playsInline />
         <div className="footer-overlay">
@@ -171,7 +153,7 @@ const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${en
               <h4>Taxtadan Emalatxanası</h4>
               <p style={{ fontStyle: 'italic', color: '#f39c12' }}>Hədiyyəniz qədər orijinalsınız.</p>
               <p>📍 Bakı şəhəri, Nizami rayonu</p>
-              <p>📞 +994 (50) XXX-XX-XX</p>
+              <p>📞 +994 (70) 7166863</p>
               <p>✉️ info@taxtadan.az</p>
             </div>
             <div className="footer-form">
@@ -187,7 +169,6 @@ const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${en
                   required
                 ></textarea>
                 <button type="submit" className="send-btn" onClick={() => {
-                  // Hazır olan mesajı birbaşa WhatsApp-a yönləndirir
                   const whatsappUrl = `https://wa.me/994707166863?text=${encodeURIComponent(orderMessage)}`;
                   window.open(whatsappUrl, '_blank');
                 }}>Mesajı Göndər</button>
@@ -197,8 +178,12 @@ const whatsappLink = `https://api.whatsapp.com/send?phone=994707166863&text=${en
         </div>
       </footer>
 
-      <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Taxtadan. Bütün hüquqlar qorunur.</p>
+      {/* FOOTER BOTTOM VƏ GİZLİ ADMİN DÜYMƏSİ */}
+      <div className="footer-bottom" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px', flexWrap: 'wrap', padding: '15px' }}>
+        <p style={{ margin: 0 }}>&copy; {new Date().getFullYear()} Taxtadan. Bütün hüquqlar qorunur.</p>
+        <Link to="/admin" style={{ opacity: 0.3, textDecoration: 'none', color: 'inherit', fontSize: '12px' }}>
+          🔒 Admin
+        </Link>
       </div>
     </div>
   );
