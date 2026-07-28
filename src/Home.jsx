@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'; // Link import edildi
 
 function Home() {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderMessage, setOrderMessage] = useState('');
   
@@ -34,18 +35,36 @@ function Home() {
   return (
     <div>
       {/* 1. Naviqasiya Menyusu */}
-      <nav className="navbar">
-        <div className="logo">
-          <img src="/woodpecker.jpg" alt="Logo" style={{ height: '50px', width: 'auto' }} />
-        </div>
-        <ul className="nav-links">
-          <li><a href="#home">Ana Səhifə</a></li>
-          <li><a href="#about">Biz Kimik?</a></li>
-          <li><a href="#products">Məhsullar</a></li>
-          <li><a href="#contact">Əlaqə</a></li>
-        </ul>
-        <button className="order-btn" onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}>Sifariş Et</button>
-      </nav>
+      {/* 1. Naviqasiya Menyusu */}
+<nav className="navbar">
+  {/* Sol Hissə: Loqo və onun dərhal sağında Hamburger düyməsi */}
+  <div className="nav-left">
+    <div className="logo">
+      <img src="/woodpecker.jpg" alt="Logo" style={{ height: '45px', width: 'auto' }} />
+    </div>
+
+    {/* Mobil üçün Hamburger Düyməsi (☰ / ✕) */}
+    <button 
+      className="hamburger-btn" 
+      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+    >
+      {isMobileMenuOpen ? '✕' : '☰'}
+    </button>
+  </div>
+
+  {/* Menyu Linkləri */}
+  <ul className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
+    <li><a href="#home" onClick={() => setIsMobileMenuOpen(false)}>Ana Səhifə</a></li>
+    <li><a href="#about" onClick={() => setIsMobileMenuOpen(false)}>Biz Kimik?</a></li>
+    <li><a href="#products" onClick={() => setIsMobileMenuOpen(false)}>Məhsullar</a></li>
+    <li><a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Əlaqə</a></li>
+  </ul>
+
+  {/* Sağ Hissə: Sifariş Et düyməsi */}
+  <button className="order-btn" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+    Sifariş Et
+  </button>
+</nav>
 
       {/* 2. Giriş (Hero) Hissəsi */}
       <header className="hero-section" id="home">
@@ -56,7 +75,7 @@ function Home() {
       </header>
 
       {/* 3. Canlı Video Bölməsi */}
-      <section className="video-section">
+      <section className="video-section" id ="about">
         <video className="bg-video" src="/woodpeckerai.mp4" autoPlay loop muted playsInline />
         <div className="video-overlay">
           <div className="video-section-content">

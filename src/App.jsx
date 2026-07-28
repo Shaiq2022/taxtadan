@@ -13,12 +13,7 @@ function App() {
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
 
-      {/* Səhifənin ən altında gözə çarpmayan gizli Admin düyməsi */}
-      <footer style={{ textAlign: 'center', padding: '20px 0', opacity: 0.4 }}>
-        <Link to="/admin" style={{ textDecoration: 'none', color: 'inherit', fontSize: '12px' }}>
-          🔒 Admin Panel
-        </Link>
-      </footer>
+      {/* Səhifənin ən altında gözə çarpmayan gizli Admin düyməsi */} 
     </Router>
   );
 }

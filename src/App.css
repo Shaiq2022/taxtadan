@@ -4,7 +4,9 @@ html, body {
   max-width: 100vw;
   overflow-x: hidden;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 /* Mobil cihazlar üçün Navbar tənzimləməsi */
 @media (max-width: 768px) {
   .navbar {
