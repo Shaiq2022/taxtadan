@@ -67,26 +67,51 @@ function Home() {
 </nav>
 
       {/* 2. Giriş (Hero) Hissəsi */}
-      <header className="hero-section" id="home">
-        <h2 className="hero-title">Eksklüziv Lazer Kəsim Suvenirlər</h2>
-        <p className="hero-subtitle">
-          Bibioğlunun emalatxanasından tamamilə təbii taxtadan hazırlanmış, fərdi dizaynlı hədiyyələr.
-        </p>
-      </header>
+      <section className="hero-fullscreen">
+  {/* Arxa fon videosu - src hissəsinə öz real videonun adını yaz */}
+ <img src="/taxtadanshekil.jpg" alt="Arxa fon" className="bg-video-full" />
+  <div className="dark-overlay"></div>
 
-      {/* 3. Canlı Video Bölməsi */}
-      <section className="video-section" id ="about">
-        <video className="bg-video" src="/woodpeckerai.mp4" autoPlay loop muted playsInline />
-        <div className="video-overlay">
-          <div className="video-section-content">
-            <h2>Təbiətin Ruhunu Dizayna Çeviririk</h2>
-            <p>
-              Biz sadəcə taxtanı kəsmirik, ona can veririk. Hər bir detal üzərində 
-              incəliklə işləyir, hədiyyənizin sizin qədər orijinal olması üçün çalışırıq.
-            </p>
-          </div>
-        </div>
-      </section>
+<div className="glass-content">
+  {/* 1-ci sətir: Lazer skan effektli zərif badge */}
+  <div className="hero-badge laser-scan-badge">
+     EKSKLÜZİV LAZER KƏSİM VƏ SUVENİRLƏR
+  </div>
+
+  <h1 className="hero-title">
+    {/* 2-ci sətir: Tünd rəngdən azad olunmuş, parlaq və interaktiv hərflər */}
+    <span className="line-two">
+      {"Siz hədiyyəniz qədər".split("").map((char, index) => (
+        <span key={index} className="hover-letter-gold">
+          {char === " " ? "\u00A0" : char}
+        </span>
+      ))}
+    </span>
+    <br />
+    
+    {/* 3-cü sətir: Lazer kəsim "orijinalsınız!" */}
+    <span className="laser-wrapper">
+      <span className="laser-text">orijinalsınız!</span>
+      <span className="laser-spark"></span>
+    </span>
+  </h1>
+
+  {/* 4-cü sətir: Bəyəndiyin interaktiv alt yazı */}
+  <p className="hero-subtitle">
+    {"Taxta və müasir materialların sintezi ilə hər bir detalı xüsusi diqqətlə işlənmiş fərdi hədiyyələr.".split("").map((char, index) => (
+      <span key={index} className="hover-letter">
+        {char === " " ? "\u00A0" : char}
+      </span>
+    ))}
+  </p>
+</div>
+  
+  <div className="scroll-indicator">
+    <div className="mouse">
+      <div className="wheel"></div>
+    </div>
+  </div>
+</section>
 
       {/* 4. Məhsullar Kataloqu */}
       <section className="products-section" id="products">
