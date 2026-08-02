@@ -1,4 +1,6 @@
-/* Ümumi tənzimləmələr */
+/* =========================================
+   1. ÜMUMİ TƏNZİMLƏMƏLƏR
+   ========================================= */
 * {
   box-sizing: border-box;
 }
@@ -22,147 +24,312 @@ body {
   color: #333;
 }
 
-/* Navbar */
 /* =========================================
-   PREMİUM ŞƏFFAF NAVBAR DİZAYNI
+   2. NAVBAR VƏ MENYU DİZAYNI
    ========================================= */
-   .navbar {
-    position: fixed; /* Səhifəni aşağı sürüşdürəndə yuxarıda sabit qalır */
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
-    background: rgba(15, 12, 8, 0.75); /* Tünd taxta tonuna uyğun yarı-şəffaf fon */
-    backdrop-filter: blur(12px); /* Arxanı bulantılı edən şüşə effekti */
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-  
-  /* Menyu Linkləri */
-  .nav-links {
-    display: flex;
-    gap: 30px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav-links a {
-    color: #942e2e;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 500;
-    position: relative;
-    transition: color 0.3s ease;
-  }
-  
-  /* Maus üzərinə gələndə qızılı rəng və alt xətt effekti */
-  .nav-links a:hover {
-    color: #f39c12;
-  }
-  
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -5px;
-    left: 0;
-    background-color: #f39c12;
-    transition: width 0.3s ease;
-  }
-  
-  .nav-links a:hover::after {
-    width: 100%;
-  }
-  
-  /* Sifariş Et Düyməsi */
-  .order-btn {
-    background: linear-gradient(135deg, #f39c12, #d35400);
-    border: none;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
-    transition: all 0.3s ease;
-  }
-  
-  .order-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.5);
-  }
-
-/* Hero Section */
-.hero-section {
-  text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #f5f0ea 0%, #e6dfd5 100%);
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background: rgba(15, 12, 8, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
-.hero-title {
-  font-size: 38px;
-  color: #2c3e50;
-  margin-bottom: 10px;
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.hero-subtitle {
-  font-size: 18px;
-  color: #160808 !important;
-  max-width: 600px;
-  margin: 0 auto;
+.nav-links a {
+  color: #942e2e;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
 }
 
-.video-overlay {
+.nav-links a:hover {
+  color: #f39c12;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #f39c12;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.order-btn {
+  background: linear-gradient(135deg, #f39c12, #d35400);
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+  transition: all 0.3s ease;
+}
+
+.order-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(243, 156, 18, 0.5);
+}
+
+/* Masaüstü ekranlarda Hamburger gizlənir */
+.hamburger-btn, 
+.menu-toggle, 
+.mobile-btn,
+.hamburger {
+  display: none !important;
+}
+
+/* =========================================
+   3. HERO SECTION (TAM EKRAN BUZLU ŞÜŞƏ)
+   ========================================= */
+.hero-fullscreen {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 30px;
+}
+
+.bg-video-full {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
+  z-index: 1;
 }
 
-.video-section-content {
+.dark-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.glass-content {
   position: relative;
   z-index: 3;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 50px 40px;
+  border-radius: 24px;
   text-align: center;
   max-width: 800px;
-  padding: 0 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: white;
+  margin: 0 20px;
+  animation: fadeIn 1s ease-out;
 }
 
-.video-section-content h2 {
-  font-size: 36px;
-  font-weight: bold;
+.hero-title {
+  font-family: 'Eczar', serif;
+  font-size: 3.5rem;
+  font-weight: 800;
   margin-bottom: 20px;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  letter-spacing: 1px;
+  text-shadow: 2px 4px 10px rgba(0,0,0,0.5);
+  color: #2c3e50;
 }
 
-.video-section-content p {
-  font-size: 18px;
-  line-height: 1.7;
-  color: #f1f2f6;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+.hero-title .highlight {
+  color: #f39c12; 
 }
 
-.promo-video {
-  width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* Məhsullar GRID Sistemi */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.mouse {
+  width: 30px;
+  height: 50px;
+  border: 2px solid white;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.wheel {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  animation: scrollWheel 1.5s infinite;
+}
+
+/* =========================================
+   4. LAZER ANİMASİYALARI & BADGE
+   ========================================= */
+.laser-scan-badge {
+  position: relative !important;
+  display: inline-block !important;
+  padding: 8px 22px !important;
+  background: rgba(20, 15, 10, 0.7) !important;
+  border: 1px solid rgba(243, 156, 18, 0.5) !important;
+  border-radius: 30px !important;
+  color: #f39c12 !important;
+  font-size: 13px !important;
+  letter-spacing: 2px !important;
+  overflow: hidden !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 0 15px rgba(243, 156, 18, 0.2) !important;
+}
+
+.laser-scan-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: badgeScan 3.5s infinite;
+}
+
+.laser-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: #f39c12;
+}
+
+.laser-text {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation: smoothCut 2.5s ease-in-out forwards;
+}
+
+.laser-spark {
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 90%;
+  background: #ffffff;
+  box-shadow: 0 0 10px 3px #ffb347, 0 0 20px 8px #ff4500, 0 0 30px 12px #ff0000;
+  border-radius: 50%;
+  animation: sparkSweep 2.5s ease-in-out forwards;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.line-two {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.hover-letter-gold {
+  display: inline-block !important;
+  color: #291212 !important; 
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9) !important;
+  transition: all 0.3s ease !important;
+  cursor: crosshair;
+}
+
+.hover-letter-gold:hover {
+  color: #f39c12 !important;
+  transform: translateY(-4px) scale(1.12) !important;
+  text-shadow: 0 0 12px #f39c12, 0 0 22px #ff4500 !important;
+  transition: 0s !important;
+}
+
+.hover-letter {
+  display: inline-block;
+  transition: color 0.6s ease, text-shadow 0.6s ease, transform 0.4s ease;
+  cursor: crosshair;
+}
+
+.hover-letter:hover {
+  color: #ffffff; 
+  text-shadow: 0 0 8px #ffaa00, 0 0 15px #ff4500, 0 0 25px #ff0000;
+  transform: scale(1.15) translateY(-2px);
+  transition: 0s;
+}
+
+.interactive-text:hover {
+  color: #fff;
+  background: rgba(255, 69, 0, 0.1);
+  text-shadow: 0 0 5px #f39c12, 0 0 10px #ff4500, 0 0 20px #ff0000;
+  transform: scale(1.02);
+}
+
+/* Keyframes */
+@keyframes scrollWheel {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(15px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes badgeScan {
+  0% { left: -100%; }
+  40%, 100% { left: 160%; }
+}
+
+@keyframes smoothCut {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+@keyframes sparkSweep {
+  0% { left: 0; opacity: 1; }
+  95% { left: 100%; opacity: 1; }
+  100% { left: 100%; opacity: 0; display: none; }
+}
+
+/* =========================================
+   5. MƏHSULLAR GRID VƏ KARTLAR
+   ========================================= */
 .products-section {
   padding: 60px 50px;
   background-color: #f5f2ed;
@@ -216,7 +383,9 @@ body {
   line-height: 1.5;
 }
 
-/* Video Section & Footer Parallax */
+/* =========================================
+   6. VİDEO BÖLMƏSİ VƏ FOOTER
+   ========================================= */
 .video-section, .footer-section {
   position: relative;
   overflow: hidden;
@@ -244,14 +413,33 @@ body {
   z-index: 2;
 }
 
+.video-section-content {
+  position: relative;
+  z-index: 3;
+  color: #ffffff;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 30px;
+}
+
+.video-section-content h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.video-section-content p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #f1f2f6;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
 .footer-section {
   width: 100%;
   display: block;
-}
-
-.footer-section, #contact {
   background: transparent !important;
-  background-color: transparent !important;
   padding: 0;
 }
 
@@ -265,6 +453,7 @@ body {
   object-fit: cover;
   z-index: 1;
   pointer-events: none;
+  max-height: none !important;
 }
 
 .footer-overlay {
@@ -274,10 +463,6 @@ body {
   width: 100%;
   height: 100%;
   padding: 80px 0;
-}
-
-.bg-video {
-  max-height: none !important;
 }
 
 .footer-container {
@@ -320,47 +505,6 @@ body {
   font-size: 14px;
 }
 
-.modal-customization {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  text-align: left;
-}
-
-.custom-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.custom-group label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.custom-group select,
-.custom-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid #dcdde1;
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: #f8f9fa;
-  color: #2c3e50;
-  outline: none;
-  box-sizing: border-box;
-  transition: all 0.25s ease;
-}
-
-.custom-group select:focus,
-.custom-group input:focus {
-  border-color: #f39c12;
-  background-color: #fff;
-  box-shadow: 0 0 5px rgba(243, 156, 18, 0.2);
-}
-
 .send-btn {
   background-color: #f39c12;
   color: #2c3e50;
@@ -388,6 +532,9 @@ body {
   z-index: 3;
 }
 
+/* =========================================
+   7. MODAL VƏ KATEQORİYA SƏHİFƏSİ
+   ========================================= */
 .modal-card {
   background-color: #fff;
   border-radius: 12px;
@@ -414,7 +561,6 @@ body {
   justify-content: space-between;
 }
 
-/* Kateqoriya səhifəsi */
 .category-page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -517,23 +663,68 @@ body {
   background-color: #27ae60;
 }
 
-.loading-box, .no-products {
-  text-align: center;
-  font-size: 18px;
-  color: #7f8c8d;
-  margin-top: 50px;
-}
-
-/* ========================================================
-   MOBİL İŞLƏMƏLƏR (MƏHZ SƏNİN KODUN, SƏLİQƏLƏŞDİRİLMİŞ VƏ ƏLAVƏ EDİLMİŞ)
-   ======================================================== */
+/* =========================================
+   8. MOBİL UYĞUNLAŞMA (RESPONSIVE)
+   ========================================= */
 @media (max-width: 768px) {
-  .navbar {
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
+  /* 1. Navbar konteynerini tam tək sətirə məcbur edirik */
+  .navbar, nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important; /* Xəttin aşağı düşməsini qətiyyən qoymur */
+    padding: 10px 15px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 2. Loqonun olduğu hissənin ölçüsünü nəzarətdə saxlayırıq */
+  .logo {
+    display: flex !important;
+    align-items: center !important;
+    max-width: 60% !important; /* Loqo bütün yeri tutub hamburgeri sıxışdırmasın */
+  }
+
+  .logo img {
+    height: 40px !important; /* Hündürlüyü sabitləyirik */
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+  }
+
+  /* 3. Hamburger düyməsi (Sıxılmanın qarşısını almaq üçün) */
+  .hamburger, 
+  .menu-toggle, 
+  .mobile-btn,
+  .mobile-menu-icon,
+  .hamburger-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex-shrink: 0 !important; /* Loqo böyüsə də hamburger sıxılıb yoxa çıxmır və ya aşağı düşmür */
     align-items: center;
-    position: relative; /* Menyunun aşağıya rahat açılması üçün */
+    justify-content: center;
+    color: #ffffff !important;
+    font-size: 22px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px;
+    padding: 5px 10px;
+    min-width: 36px;
+    min-height: 36px;
+    cursor: pointer;
+  }
+}@media (max-width: 768px) {
+  /* Navbar */
+  .navbar, nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 10px 15px !important;
+    width: 100% !important;
+    position: relative;
   }
 
   .logo img {
@@ -541,27 +732,35 @@ body {
     width: auto !important;
   }
 
-  /* Hamburger düyməsinin görsənməsi */
+  /* Hamburger Düyməsi */
+  .hamburger, 
+  .menu-toggle, 
+  .mobile-btn,
+  .mobile-menu-icon,
   .hamburger-btn {
     display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex-shrink: 0 !important;
     align-items: center;
     justify-content: center;
-    background: #f4f4f6;
-    border: 1px solid #dcdcdc;
+    color: #ffffff !important;
+    font-size: 22px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 6px;
-    font-size: 20px;
-    padding: 4px 10px;
+    padding: 5px 10px;
+    min-width: 36px;
+    min-height: 36px;
     cursor: pointer;
-    color: #2c3e50;
-    line-height: 1;
   }
 
-  /* Standart halda menyunu gizlədirik */
+  /* Standart Menyu Linklərini gizlədirik */
   .nav-links {
     display: none !important;
   }
 
-  /* YALNIZ Hamburger tıklandıqda (isMobileMenuOpen=true) açılan Menyular */
+  /* Hamburger Sıxılanda Açılan Mobil Menyu */
   .nav-links.mobile-active {
     display: flex !important;
     flex-direction: column !important;
@@ -588,20 +787,29 @@ body {
     padding: 6px 0 !important;
   }
 
-  .order-btn {
-    padding: 8px 14px;
-    font-size: 12px;
-    white-space: nowrap;
+  /* Hero & Mətn Ölçüləri */
+  .hero-fullscreen {
+    height: 90vh;
   }
-
+  
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     padding: 0 10px;
   }
 
   .hero-subtitle {
     font-size: 0.9rem;
     padding: 0 15px;
+  }
+
+  .glass-content {
+    padding: 30px 20px;
+  }
+
+  .order-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+    white-space: nowrap;
   }
 
   .video-section {
@@ -616,6 +824,7 @@ body {
     font-size: 15px;
   }
 
+  /* Footer Mobil Vizualı */
   .footer-container {
     display: flex !important;
     flex-direction: column !important;
@@ -644,310 +853,4 @@ body {
     align-items: center !important;
     gap: 8px !important;
   }
-}
-/* =========================================
-   YENİ TAM EKRAN HERO (Buzlu Şüşə Effekti)
-   ========================================= */
-.hero-fullscreen {
-  position: relative;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-top: 30 px; /* Navbar-ın altından başlaması üçün. Ehtiyac olsa rəqəmi dəyiş */
-}
-
-.bg-video-full {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-
-.dark-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 2;
-}
-
-.glass-content {
-  position: relative;
-  z-index: 3;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 50px 40px;
-  border-radius: 24px;
-  text-align: center;
-  max-width: 800px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  color: white;
-  margin: 0 20px;
-  animation: fadeIn 1s ease-out;
-}
-
-.hero-badge {
-  display: inline-block;
-  padding: 8px 18px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 30px;
-  font-size: 13px;
-  letter-spacing: 2px;
-  margin-bottom: 25px;
-  text-transform: uppercase;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  margin-bottom: 20px;
-  line-height: 1.2;
-  text-shadow: 2px 4px 10px rgba(0,0,0,0.5);
-}
-
-.hero-title .highlight {
-  color: #f39c12; 
-}
-
-.hero-subtitle {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #e0e0e0;
-}
-
-/* Aşağı Sürüşdür (Mouse) Animasiyası */
-.scroll-indicator {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-}
-
-.mouse {
-  width: 30px;
-  height: 50px;
-  border: 2px solid white;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-}
-
-.wheel {
-  width: 6px;
-  height: 6px;
-  background-color: white;
-  border-radius: 50%;
-  animation: scrollWheel 1.5s infinite;
-}
-
-@keyframes scrollWheel {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(15px); opacity: 0; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-  .hero-fullscreen {
-    height: 90vh;
-  }
-  .hero-title { font-size: 2.2rem; }
-  .glass-content { padding: 30px 20px; }
-}
-/* =========================================
-   LAZER YAZILMA (TYPEWRITER) ANİMASİYASI
-   ========================================= */
-
-
-/* Lazerin sözü kəsərək açması */
-@keyframes laserCut {
-  0% { width: 0; }
-  100% { width: 100%; }
-}
-
-/* Lazerin ucundakı işığın yanıb-sönməsi (qığılcım) */
-@keyframes laserSpark {
-  0%, 100% { 
-    border-right-color: #ff3300; 
-    box-shadow: 4px 0 15px #ff3300, 2px 0 5px #ff3300; 
-  }
-  50% { 
-    border-right-color: #ffd700; 
-    box-shadow: 4px 0 20px #ffd700, 2px 0 10px #ffd700; 
-  }
-}
-/* =========================================
-   1. ƏSL LAZER KƏSİM ANİMASİYASI (Ana başlıq)
-   ========================================= */
-.laser-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  color: #f39c12; /* Qızılı taxta rəngi */
-}
-
-/* Kəsilərək açılan yazı (qırıq-qırıq yox, hamar) */
-.laser-text {
-  overflow: hidden;
-  white-space: nowrap;
-  width: 0;
-  animation: smoothCut 2.5s ease-in-out forwards;
-}
-
-/* Lazerin kəsici ucu (Qığılcım və istilik) */
-.laser-spark {
-  position: absolute;
-  left: 0;
-  width: 3px;
-  height: 90%;
-  background: #ffffff; /* Lazerin mərkəzi ağ-isti olur */
-  box-shadow: 0 0 10px 3px #ffb347, 0 0 20px 8px #ff4500, 0 0 30px 12px #ff0000; /* Qırmızı/Narıncı aura */
-  border-radius: 50%;
-  animation: sparkSweep 2.5s ease-in-out forwards;
-  pointer-events: none;
-  z-index: 2;
-}
-
-@keyframes smoothCut {
-  0% { width: 0; }
-  100% { width: 100%; }
-}
-
-@keyframes sparkSweep {
-  0% { left: 0; opacity: 1; }
-  95% { left: 100%; opacity: 1; }
-  100% { left: 100%; opacity: 0; display: none; } /* Kəsim bitəndə qığılcım sönür */
-}
-
-/* =========================================
-   2. HƏRFLƏRİN TƏK-TƏK KÖZƏRMƏSİ (Alt yazı)
-   ========================================= */
-.hover-letter {
-  display: inline-block;
-  transition: color 0.6s ease, text-shadow 0.6s ease, transform 0.4s ease;
-  cursor: crosshair;
-}
-
-/* Kursor hərfin üstünə gələndə anında (0s) yanan lazer effekti */
-.hover-letter:hover {
-  color: #ffffff; 
-  text-shadow: 0 0 8px #ffaa00, 0 0 15px #ff4500, 0 0 25px #ff0000;
-  transform: scale(1.15) translateY(-2px);
-  transition: 0s; /* Kursor dəyən kimi anında reaksiya */
-}
-
-
-/* Maus üzərinə gələndə yazı közərir */
-.interactive-text:hover {
-  color: #fff;
-  background: rgba(255, 69, 0, 0.1); /* Çox zəif qırmızı arxa fon */
-  text-shadow: 
-    0 0 5px #f39c12, 
-    0 0 10px #ff4500, 
-    0 0 20px #ff0000; /* Közərmə parıltısı */
-  transform: scale(1.02); /* Yüngülcə önə çıxır */
-}
-/* =========================================
-   HAMBURGER DÜYMƏSİNİN REQULYASİYASI
-   ========================================= */
-
-/* 1. Böyük ekranlarda (Kompyuterdə) hamburger düyməsini GİZLƏDİRİK */
-.hamburger-btn, 
-.menu-toggle, 
-.mobile-btn {
-  display: none !important;
-}
-
-/* 2. Yalnız Mobil ekranlarda (768px və daha kiçik) hamburgeri GÖSTƏRİRİK */
-@media (max-width: 768px) {
-  .hamburger, 
-  .menu-toggle, 
-  .mobile-btn {
-    display: block !important;
-  }
-
-  /* Mobildə ortadakı menyu linklərini gizlədirik (hamburgerə basanda açılması üçün) */
-  .nav-links {
-    display: none; 
-  }
-}
-.hero-title {
-  font-family: 'Eczar', serif; /* Oymalı peşəkar şrift */
-  letter-spacing: 1px;
-}
-
-.hero-subtitle {
-  font-family: 'Montserrat', sans-serif;
-}
-/* =========================================
-   1-Cİ SƏTİR (Badge) Lazer İşıq Skanı Effekti
-   ========================================= */
-.laser-scan-badge {
-  position: relative !important;
-  display: inline-block !important;
-  padding: 8px 22px !important;
-  background: rgba(20, 15, 10, 0.7) !important;
-  border: 1px solid rgba(243, 156, 18, 0.5) !important; /* Qızılı çərçivə */
-  border-radius: 30px !important;
-  color: #f39c12 !important; /* Parlaq qızılı yazı */
-  font-size: 13px !important;
-  letter-spacing: 2px !important;
-  overflow: hidden !important;
-  margin-bottom: 20px !important;
-  box-shadow: 0 0 15px rgba(243, 156, 18, 0.2) !important;
-}
-
-/* Badge üzərindən periodik keçən lazer işığı */
-.laser-scan-badge::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  animation: badgeScan 3.5s infinite;
-}
-
-@keyframes badgeScan {
-  0% { left: -100%; }
-  40%, 100% { left: 160%; }
-}
-
-/* =========================================
-   2-Cİ SƏTİR ("Siz hədiyyəniz qədər") YENİLƏNMƏSİ
-   ========================================= */
-.line-two {
-  display: inline-block;
-  margin-bottom: 8px;
-}
-
-/* Tünd göy rəngi ləğv edib ağ/krem edirik */
-.hover-letter-gold {
-  display: inline-block !important;
-  color: #291212 !important; 
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9) !important;
-  transition: all 0.3s ease !important;
-  cursor: crosshair;
-}
-
-/* Mausu 2-ci sətrin hərflərinə vuranda parlaq qızılı közərmə */
-.hover-letter-gold:hover {
-  color: #f39c12 !important;
-  transform: translateY(-4px) scale(1.12) !important;
-  text-shadow: 0 0 12px #f39c12, 0 0 22px #ff4500 !important;
-  transition: 0s !important;
 }

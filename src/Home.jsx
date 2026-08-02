@@ -38,7 +38,7 @@ function Home() {
       {/* 1. Naviqasiya Menyusu */}
 <nav className="navbar">
   {/* Sol Hissə: Loqo və onun dərhal sağında Hamburger düyməsi */}
-  <div className="nav-left">
+  <div className="nav-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
     <div className="logo">
       <img src="/woodpecker.jpg" alt="Logo" style={{ height: '45px', width: 'auto' }} />
     </div>
