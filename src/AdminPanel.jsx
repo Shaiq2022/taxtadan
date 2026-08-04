@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from './firebase'; 
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-
+import imageCompression from 'browser-image-compression'; 
 // 1. ÖZ IMGBB API AÇARINI BURAYA YAZ
 const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY;
 
@@ -80,10 +80,20 @@ function AdminPanel() {
 
     setLoading(true);
 
-    try {
-      // ADIM A: Şəkli ImgBB-yə yükləmək
+   try {
+      // ADIM A.1: Şəkli brauzerdə sıxırıq (yüngülləşdiririk)
+      const options = {
+        maxSizeMB: 0.3,          // Maksimum fayl ölçüsü ~300 KB (əvvəlki 3-5 MB əvəzinə)
+        maxWidthOrHeight: 1200,   // Telefon və kompüter ekranı üçün mükəmməl ölçü
+        useWebWorker: true,
+      };
+
+      // `image` dəyişənini sıxılmış `compressedFile` ilə əvəz edirik
+      const compressedFile = await imageCompression(image, options);
+
+      // ADIM A.2: Artıq sıxılmış yüngül şəkli ImgBB-yə yükləyirik
       const formData = new FormData();
-      formData.append('image', image);
+      formData.append('image', compressedFile);
 
       const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
         method: 'POST',
@@ -96,31 +106,8 @@ function AdminPanel() {
         throw new Error("ImgBB-yə şəkil yüklənərkən xəta baş verdi.");
       }
 
-      const imageUrl = imgbbData.data.display_url; 
-
-      // ADIM B: Firebase-ə yazmaq
-      const productData = {
-        title: title,
-        category: category,
-        price: Number(price),
-        image: imageUrl,
-        createdAt: new Date().toISOString()
-      };
-
-      await addDoc(collection(db, 'products'), productData);
-
-      // Formanı sıfırlayırıq
-      setTitle('');
-      setCategory('reklam');
-      setPrice('');
-      setImage(null);
-      
-      const fileInput = document.getElementById('imageInput');
-      if (fileInput) fileInput.value = '';
-
-      fetchProducts();
-
-    } catch (error) {
+      const imageUrl = imgbbData.data.display_url;}
+    catch (error) {
       console.error('Xəta baş verdi:', error);
       alert('Məhsul yerləşdirilə bilmədi: ' + error.message);
     } finally {
