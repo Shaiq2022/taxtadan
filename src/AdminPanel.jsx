@@ -86,6 +86,7 @@ function AdminPanel() {
         maxSizeMB: 0.3,          // Maksimum fayl ölçüsü ~300 KB (əvvəlki 3-5 MB əvəzinə)
         maxWidthOrHeight: 1200,   // Telefon və kompüter ekranı üçün mükəmməl ölçü
         useWebWorker: true,
+        fileType: "image/webp"
       };
 
       // `image` dəyişənini sıxılmış `compressedFile` ilə əvəz edirik

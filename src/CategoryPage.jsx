@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { db } from './firebase'; 
-import { collection, query, where, getDocs } from 'firebase/firestore'; 
+import { collection, query, where, getDocs, limit, startAfter } from 'firebase/firestore'; 
 
 function CategoryPage() {
   const { categoryName } = useParams(); 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [logoText, setLogoText] = useState('');
+
+  // --- PAGINATION (HİSSƏ-HİSSƏ YÜKLƏMƏ) STATE-LƏRİ ---
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const PRODUCTS_PER_PAGE = 8; // Hər dəfə 8 məhsul yüklənəcək
 
   // --- MODAL STATE-LƏRİ ---
   const [selectedProduct, setSelectedProduct] = useState(null); // Sifariş forması üçün
@@ -20,35 +26,80 @@ function CategoryPage() {
   const [logoFile, setLogoFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [deliveryMethod, setDeliveryMethod] = useState('workshop'); // 'workshop' (Emalatxana) və ya 'courier' (Kuryer)
+  const [deliveryMethod, setDeliveryMethod] = useState('workshop'); // 'workshop' və ya 'courier'
 
-  // 🔴 BİBİOĞLUNUN REAL WHATSAPP NÖMRƏSİ
-  const whatsappNumber = "994XXXXXXXXX"; 
+  // --- 1. İLK 8 MƏHSULU ÇƏKƏN FUNKSİYA ---
+  const fetchInitialProducts = async () => {
+    setLoading(true);
+    try {
+      const q = query(
+        collection(db, 'products'),
+        where('category', '==', categoryName),
+        limit(PRODUCTS_PER_PAGE)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const productsList = [];
+
+      querySnapshot.forEach((doc) => {
+        productsList.push({ id: doc.id, ...doc.data() });
+      });
+
+      setProducts(productsList);
+
+      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      setLastDoc(lastVisible);
+
+      if (querySnapshot.docs.length < PRODUCTS_PER_PAGE) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
+    } catch (error) {
+      console.error("Məhsul yükləmə xətası:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- 2. "DAHA ÇOX GÖR" DÜYMƏSİNƏ BASANDA NÖVBƏTİ MƏHSULLARI GƏTİRƏN FUNKSİYA ---
+  const loadMoreProducts = async () => {
+    if (!lastDoc || !hasMore) return;
+
+    setLoadingMore(true);
+    try {
+      const q = query(
+        collection(db, 'products'),
+        where('category', '==', categoryName),
+        startAfter(lastDoc),
+        limit(PRODUCTS_PER_PAGE)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const newProductsList = [];
+
+      querySnapshot.forEach((doc) => {
+        newProductsList.push({ id: doc.id, ...doc.data() });
+      });
+
+      setProducts((prevProducts) => [...prevProducts, ...newProductsList]);
+
+      const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      setLastDoc(lastVisible);
+
+      if (querySnapshot.docs.length < PRODUCTS_PER_PAGE) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Əlavə məhsul yüklənərkən xəta:", error);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const q = query(collection(db, 'products'), where('category', '==', categoryName));
-        const querySnapshot = await getDocs(q);
-        const productsList = [];
-        querySnapshot.forEach((doc) => {
-          productsList.push({ id: doc.id, ...doc.data() });
-        });
-        setProducts(productsList);
-      } catch (error) {
-        console.error("Məhsul yükləmə xətası:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  fetch('http://localhost:5000/api/products')
-      .then(response => response.json())
-      .then(data => {
-        console.log("MÖHTƏŞƏM! Backend-dən gələn məlumatlar:", data);
-      })
-      .catch(error => console.error("Backend-ə qoşula bilmədik:", error));}, [categoryName]);
+    fetchInitialProducts();
+  }, [categoryName]);
 
   const uploadToImgBB = async (file) => {
     if (!file) return null;
@@ -63,50 +114,47 @@ function CategoryPage() {
     const data = await response.json();
     return data.success ? data.data.url : null;
   };
-const handleFinalOrder = (e) => {
-  if (e) e.preventDefault();
 
-  const phoneNumber = "994707166863"; 
+  const handleFinalOrder = (e) => {
+    if (e) e.preventDefault();
 
-  // 1. Ünvanı müəyyən edirik
-  const currentAddress = typeof address !== 'undefined' ? address : '';
-  const currentDelivery = typeof deliveryMethod !== 'undefined' ? deliveryMethod : 'workshop';
+    const phoneNumber = "994707166863"; 
 
-  const finalAddress = currentDelivery === 'workshop' 
-    ? '📍 Müştəri özü emalatxanadan götürəcək ' 
-    : `📍 Kuryerlə çatdırılma: ${currentAddress || 'Ünvan yazılmayıb'}`;
+    const currentAddress = typeof address !== 'undefined' ? address : '';
+    const currentDelivery = typeof deliveryMethod !== 'undefined' ? deliveryMethod : 'workshop';
 
-  // 2. Xəritə linki (yalnız kuryer seçiləndə və ünvan varsa)
-  const mapsLink = (currentDelivery === 'courier' && currentAddress) 
-    ? `https://maps.google.com/?q=${encodeURIComponent(currentAddress)}` 
-    : '';
+    const finalAddress = currentDelivery === 'workshop' 
+      ? '📍 Müştəri özü emalatxanadan götürəcək ' 
+      : `📍 Kuryerlə çatdırılma: ${currentAddress || 'Ünvan yazılmayıb'}`;
 
-  // 3. Təhlükəsiz Məhsul Adı, Ölçü, Material və Mətn tapılması
-  const prodName = typeof title !== 'undefined' ? title : (typeof productName !== 'undefined' ? productName : '');
-  const prodSize = typeof size !== 'undefined' ? size : (typeof selectedSize !== 'undefined' ? selectedSize : '');
-  const prodMat = typeof material !== 'undefined' ? material : (typeof selectedMaterial !== 'undefined' ? selectedMaterial : '');
-  const textVal = typeof customText !== 'undefined' ? customText : (typeof logoText !== 'undefined' ? logoText : '');
+    const mapsLink = (currentDelivery === 'courier' && currentAddress) 
+      ? `https://maps.google.com/?q=${encodeURIComponent(currentAddress)}` 
+      : '';
 
-  // 4. WhatsApp mesaj mətni
-  let message = `Salam! *Taxtadan.az* saytından sifariş etmək istəyirəm:\n\n`;
-  if (prodName) message += `🔨 *Məhsul:* ${prodName}\n`;
-  if (prodSize) message += `📐 *İstədiyiniz Ölçü:* ${prodSize}\n`;
-  if (prodMat) message += `🌲 *İstifadə olunacaq material:* ${prodMat}\n`;
-  
-  message += `${finalAddress}\n`;
+    const prodName = selectedProduct ? selectedProduct.title : '';
+    const prodSize = typeof size !== 'undefined' ? size : '';
+    const prodMat = typeof material !== 'undefined' ? material : '';
+    const textVal = typeof logoText !== 'undefined' ? logoText : '';
 
-  if (mapsLink) {
-    message += `🗺️ *Xəritədə konumu:* ${mapsLink}\n`;
-  }
+    let message = `Salam! *Taxtadan.az* saytından sifariş etmək istəyirəm:\n\n`;
+    if (prodName) message += `🔨 *Məhsul:* ${prodName}\n`;
+    if (prodSize) message += `📐 *İstədiyiniz Ölçü:* ${prodSize}\n`;
+    if (prodMat) message += `🌲 *İstifadə olunacaq material:* ${prodMat}\n`;
+    
+    message += `${finalAddress}\n`;
 
-  message += `✍️ *Üzərində yazılacaq mətn:* ${textVal || 'Əlavə edilməyib'}\n\n`;
-  message += `Zəhmət olmasa sifarişi qəbul edin.`;
+    if (mapsLink) {
+      message += `🗺️ *Xəritədə konumu:* ${mapsLink}\n`;
+    }
 
-  // 5. WhatsApp keçidi (Pop-up blokerə düşməmək üçün window.location.href)
-  const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-  
-  window.location.href = whatsappUrl;
-};
+    message += `✍️ *Üzərində yazılacaq mətn:* ${textVal || 'Əlavə edilməyib'}\n\n`;
+    message += `Zəhmət olmasa sifarişi qəbul edin.`;
+
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+    
+    window.location.href = whatsappUrl;
+  };
+
   const categoryTitles = {
     reklam: 'Reklam Lövhələri və Banerlər',
     dekorlar: 'Ev və Ofis Dekorları',
@@ -130,42 +178,65 @@ const handleFinalOrder = (e) => {
         {products.length === 0 ? (
           <p style={{ textAlign: 'center', color: '#777' }}>Bu bölmədə hələ ki məhsul yoxdur.</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '30px' }}>
-            {products.map((product) => (
-              <div key={product.id} style={{ border: '1px solid #e2d7c5', borderRadius: '12px', padding: '15px', textAlign: 'center', backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                
-                {/* 🔍 Şəklə klik edəndə ARTIQ FORM YOX, ŞƏKİL ÖZÜ BÖYÜYƏCƏK */}
-                <img 
-                  src={product.image} 
-                  alt={product.title} 
-                  onClick={() => setZoomedImage(product.image)} 
-                  style={{ width: '100%', height: '240px', objectFit: 'cover', borderRadius: '8px', cursor: 'zoom-in' }} 
-                  title="Böyütmək üçün klikləyin"
-                />
-                
-                <h3 style={{ fontSize: '18px', margin: '15px 0 5px 0', color: '#3e2723' }}>{product.title}</h3>
-                <p style={{ fontWeight: 'bold', color: '#b71c1c', fontSize: '17px', margin: '0 0 15px 0' }}>{product.price} AZN</p>
-                
-                {/* 💬 Formu açmaq missiyası tamamilə bu düymənindir */}
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '30px' }}>
+              {products.map((product) => (
+                <div key={product.id} style={{ border: '1px solid #e2d7c5', borderRadius: '12px', padding: '15px', textAlign: 'center', backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  
+                  <img 
+                    src={product.image} 
+                    alt={product.title} 
+                    loading="lazy"
+                    onClick={() => setZoomedImage(product.image)} 
+                    style={{ width: '100%', height: '240px', objectFit: 'cover', borderRadius: '8px', cursor: 'zoom-in' }} 
+                    title="Böyütmək üçün klikləyin"
+                  />
+                  
+                  <h3 style={{ fontSize: '18px', margin: '15px 0 5px 0', color: '#3e2723' }}>{product.title}</h3>
+                  <p style={{ fontWeight: 'bold', color: '#b71c1c', fontSize: '17px', margin: '0 0 15px 0' }}>{product.price} AZN</p>
+                  
+                  <button 
+                    onClick={() => setSelectedProduct(product)}
+                    style={{ backgroundColor: '#25D366', color: '#fff', border: 'none', padding: '12px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                  >
+                    💬 Oxşarını Sifariş Et
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* 🔴 DÜZGÜN YERLƏŞDİRİLMİŞ "DAHA ÇOX GÖR" DÜYMƏSİ */}
+            {hasMore && (
+              <div style={{ textAlign: 'center', margin: '30px 0 10px 0' }}>
                 <button 
-                  onClick={() => setSelectedProduct(product)}
-                  style={{ backgroundColor: '#25D366', color: '#fff', border: 'none', padding: '12px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+                  onClick={loadMoreProducts} 
+                  disabled={loadingMore}
+                  style={{
+                    padding: '12px 28px',
+                    backgroundColor: '#8B4513',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '15px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                  }}
                 >
-                  💬 Oxşarını Sifariş Et
+                  {loadingMore ? "⏳ Yüklənir..." : "Daha Çox Gör"}
                 </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
       {/* ================= 1. ŞƏKİL BÖYÜTMƏ MODALI (LIGHTBOX) ================= */}
       {zoomedImage && (
         <div 
-          onClick={() => setZoomedImage(null)} // Boşluğa klikləyəndə bağlansın
+          onClick={() => setZoomedImage(null)}
           style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000, cursor: 'zoom-out' }}
         >
-          {/* Bağlamaq düyməsi */}
           <button 
             onClick={() => setZoomedImage(null)} 
             style={{ position: 'absolute', top: '20px', right: '30px', background: 'none', border: 'none', color: '#fff', fontSize: '40px', cursor: 'pointer' }}
@@ -173,12 +244,11 @@ const handleFinalOrder = (e) => {
             &times;
           </button>
           
-          {/* Böyüdülmüş Şəkil */}
           <img 
             src={zoomedImage} 
             alt="Böyük görünüş" 
             style={{ maxWidth: '90%', maxHeight: '90vh', borderRadius: '8px', boxShadow: '0 5px 25px rgba(0,0,0,0.5)', objectFit: 'contain' }} 
-            onClick={(e) => e.stopPropagation()} // Şəklin özünə klikləyəndə pəncərə bağlanmasın
+            onClick={(e) => e.stopPropagation()} 
           />
         </div>
       )}
@@ -198,13 +268,11 @@ const handleFinalOrder = (e) => {
             </p>
 
             <form onSubmit={handleFinalOrder}>
-              {/* Ölçü */}
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px', fontSize: '14px' }}>📏 İstədiyiniz Ölçü:</label>
                 <input type="text" placeholder="Məsələn: 40x60 sm və ya A4 ölçüsü" value={size} onChange={(e) => setSize(e.target.value)} required style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
               </div>
 
-              {/* Material */}
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ fontWeight: 'bold', marginBottom: '5px', fontSize: '14px', display: 'block' }}>🌲 İstifadə olunacaq material:</label>
                 <select value={material} onChange={(e) => setMaterial(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}>
@@ -216,9 +284,6 @@ const handleFinalOrder = (e) => {
                 </select>
               </div>
 
-             
-
-              {/* Loqo Mətn Yükləmə */}
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px', fontSize: '14px' }}>
                   ✍️ Üzərində yazılacaq mətn və ya ad (Varsa):
@@ -232,82 +297,75 @@ const handleFinalOrder = (e) => {
                 />
               </div>
 
-              {/* Loqo Fayl Yükləmə */}
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px', fontSize: '14px' }}>✨ Loqonuz (Varsa əlavə edin):</label>
                 <input type="file" accept="image/*" onChange={(e) => setLogoFile(e.target.files[0])} style={{ fontSize: '13px' }} />
               </div>
 
-              {/* Şəkil Yükləmə */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px', fontSize: '14px' }}>📸 Üzərində istifadə olunacaq xüsusi şəkil (Varsa):</label>
                 <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} style={{ fontSize: '13px' }} />
               </div>
 
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
+                  🚚 Təhvil alma forması:
+                </label>
+                <select 
+                  value={deliveryMethod} 
+                  onChange={(e) => setDeliveryMethod(e.target.value)} 
+                  style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+                >
+                  <option value="workshop">Emalatxanadan özüm götürəcəm</option>
+                  <option value="courier">Kuryerlə çatdırılma (əlavə ödənişlə)</option>
+                </select>
 
-{/* ---------------------------------------------------- */}
-{/* 6. TƏHVİL ALMA FORMASI VƏ XƏRİTƏ / ÜNVAN BÖLMƏSİ      */}
-{/* ---------------------------------------------------- */}
-{/* 6. TƏHVİL ALMA FORMASI VƏ XƏRİTƏ / ÜNVAN BÖLMƏSİ */}
-<div style={{ marginBottom: '15px' }}>
-  <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
-    🚚 Təhvil alma forması:
-  </label>
-  <select 
-    value={deliveryMethod} 
-    onChange={(e) => setDeliveryMethod(e.target.value)} 
-    style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
-  >
-    <option value="workshop">Emalatxanadan özüm götürəcəm</option>
-    <option value="courier">Kuryerlə çatdırılma (əlavə ödənişlə)</option>
-  </select>
+                {deliveryMethod === 'workshop' && (
+                  <div style={{ marginTop: '10px' }}>
+                    <iframe 
+                      title="Emalatxana Xəritəsi"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.7087186492104!2d49.957029975215995!3d40.41530315572746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4030631509165e1d%3A0x9e5fe80f6ac3fd78!2staxtadan!5e0!3m2!1sru!2saz!4v1784576622426!5m2!1sru!2saz" 
+                      width="100%" 
+                      height="160" 
+                      style={{ border: 0, borderRadius: '8px' }} 
+                      allowFullScreen="" 
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                    ></iframe>
+                    <p style={{ color: '#2e7d32', fontSize: '12px', marginTop: '5px', background: '#e8f5e9', padding: '8px', borderRadius: '5px' }}>
+                      * Ünvanımız: Sifariş hazır olanda yaxınlaşıb emalatxanadan götürə bilərsiniz.
+                    </p>
+                  </div>
+                )}
 
-  {/* A) "Emalatxanadan götürəcəm" seçiləndə -> Sabit Emalatxana Xəritəsi */}
-  {deliveryMethod === 'workshop' && (
-    <div style={{ marginTop: '10px' }}>
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.7087186492104!2d49.957029975215995!3d40.41530315572746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4030631509165e1d%3A0x9e5fe80f6ac3fd78!2staxtadan!5e0!3m2!1sru!2saz!4v1784576622426!5m2!1sru!2saz" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-        width="100%" 
-        height="160" 
-        style={{ border: 0, borderRadius: '8px' }} 
-        allowFullScreen="" 
-        loading="lazy"
-      ></iframe>
-      <p style={{ color: '#2e7d32', fontSize: '12px', marginTop: '5px', background: '#e8f5e9', padding: '8px', borderRadius: '5px' }}>
-        * Ünvanımız: Sifariş hazır olanda yaxınlaşıb emalatxanadan götürə bilərsiniz.
-      </p>
-    </div>
-  )}
+                {deliveryMethod === 'courier' && (
+                  <div style={{ marginTop: '10px' }}>
+                    <label style={{ display: 'block', fontSize: '14px', marginBottom: '5px' }}>
+                      📍 Çatdırılma ünvanınızı yazın:
+                    </label>
+                    <input 
+                      type="text" 
+                      value={address} 
+                      onChange={(e) => setAddress(e.target.value)} 
+                      placeholder="Rayon, Küçə, Ev nömrəsi və s." 
+                      style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px' }}
+                    />
 
-  {/* B) "Kuryerlə çatdırılma" seçiləndə -> Ünvan qutusu + Canlı Xəritə */}
-  {deliveryMethod === 'courier' && (
-    <div style={{ marginTop: '10px' }}>
-      <label style={{ display: 'block', fontSize: '14px', marginBottom: '5px' }}>
-        📍 Çatdırılma ünvanınızı yazın:
-      </label>
-      <input 
-        type="text" 
-        value={address} 
-        onChange={(e) => setAddress(e.target.value)} 
-        placeholder="Rayon, Küçə, Ev nömrəsi və s." 
-        style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px' }}
-      />
+                    {address.trim() !== '' && (
+                      <iframe 
+                        title="Çatdırılma Ünvanı"
+                        src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                        width="100%" 
+                        height="160" 
+                        style={{ border: 0, borderRadius: '8px' }} 
+                        allowFullScreen="" 
+                        loading="lazy"
+                      ></iframe>
+                    )}
+                  </div>
+                )}
+              </div>
 
-      {/* Müştəri ünvan yazan kimi avtomatik xəritə çıxır */}
-      {address.trim() !== '' && (
-        <iframe 
-          title="Çatdırılma Ünvanı"
-          src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-          width="100%" 
-          height="160" 
-          style={{ border: 0, borderRadius: '8px' }} 
-          allowFullScreen="" 
-          loading="lazy"
-        ></iframe>
-      )}
-    </div>
-  )}
-</div>
               <button 
                 type="submit" 
                 disabled={isSubmitting}
