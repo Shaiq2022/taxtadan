@@ -3,8 +3,7 @@ import { db } from './firebase';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import imageCompression from 'browser-image-compression'; 
 // 1. ÖZ IMGBB API AÇARINI BURAYA YAZ
-const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY;
-
+const IMGBB_API_KEY = "642e7a19a227356872990def90acf2d2";
 // 2. ADMİN PANELƏ GİRİŞ ŞİFRƏSİNİ BURADA TƏYİN ET
 const ADMIN_PASSWORD = 'taxtadan2026'; // İstədiyin şifrə ilə dəyişə bilərsən
 
@@ -69,7 +68,7 @@ function AdminPanel() {
     }
   };
 
-  // 1. Yeni Məhsul Əlavə Etmə (ImgBB + Firebase)
+ // 1. Yeni Məhsul Əlavə Etmə (ImgBB + Firebase)
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -80,18 +79,18 @@ function AdminPanel() {
 
     setLoading(true);
 
-   try {
-      // ADIM A.1: Şəkli brauzerdə sıxırıq (yüngülləşdiririk)
+    try {
+      // ADIM A.1: Şəkli brauzerdə sıxırıq
       const options = {
-        maxSizeMB: 0.3,          // Maksimum fayl ölçüsü ~300 KB (əvvəlki 3-5 MB əvəzinə)
-        maxWidthOrHeight: 1200,   // Telefon və kompüter ekranı üçün mükəmməl ölçü
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 1200,
         useWebWorker: true,
+        fileType: "image/webp"
       };
 
-      // `image` dəyişənini sıxılmış `compressedFile` ilə əvəz edirik
       const compressedFile = await imageCompression(image, options);
 
-      // ADIM A.2: Artıq sıxılmış yüngül şəkli ImgBB-yə yükləyirik
+      // ADIM A.2: Sıxılmış şəkli ImgBB-yə yükləyirik
       const formData = new FormData();
       formData.append('image', compressedFile);
 
@@ -106,15 +105,35 @@ function AdminPanel() {
         throw new Error("ImgBB-yə şəkil yüklənərkən xəta baş verdi.");
       }
 
-      const imageUrl = imgbbData.data.display_url;}
-    catch (error) {
+      const imageUrl = imgbbData.data.display_url;
+
+      // 🌟 ADIM A.3: MƏHSULUN MƏLUMATLARINI FIREBASE FIRESTORE-A YAZIRIQ
+      await addDoc(collection(db, 'products'), {
+        title: title,
+        category: category,
+        price: Number(price),
+        image: imageUrl,
+        createdAt: new Date()
+      });
+
+      alert("Məhsul uğurla əlavə olundu!");
+
+      // Formanı sıfırlayırıq
+      setTitle('');
+      setPrice('');
+      setImage(null);
+      document.getElementById('imageInput').value = '';
+
+      // Siyahını yeniləyirik
+      fetchProducts();
+
+    } catch (error) {
       console.error('Xəta baş verdi:', error);
       alert('Məhsul yerləşdirilə bilmədi: ' + error.message);
     } finally {
       setLoading(false);
     }
   };
-
   // 2. Məhsulun Silinməsi
   const handleDelete = async (id) => {
     if (window.confirm("Bu məhsulu silməyə əminsiniz?")) {

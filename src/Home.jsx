@@ -1,10 +1,10 @@
 import './App.css';
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Link import edildi
+import { useNavigate, Link } from 'react-router-dom';
 
 function Home() {
   const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderMessage, setOrderMessage] = useState('');
   
@@ -12,6 +12,20 @@ function Home() {
   const [productSize, setProductSize] = useState('A5 (Standart)');
   const [materialType, setMaterialType] = useState('Tam Təbii Taxta');
   const [customText, setCustomText] = useState('');
+
+  // 🌟 Səlis sürüşdürmə funksiyası
+  const scrollToSection = (id) => {
+    setIsMobileMenuOpen(false); // Mobil menyunu bağlayırıq
+    
+    if (id === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const handleOrderClick = (title) => {
     let message = `Salam! *Taxtadan.az* saytından sifariş etmək istəyirəm:\n\n`;
@@ -35,83 +49,87 @@ function Home() {
   return (
     <div>
       {/* 1. Naviqasiya Menyusu */}
-      {/* 1. Naviqasiya Menyusu */}
-<nav className="navbar">
-  {/* Sol Hissə: Loqo və onun dərhal sağında Hamburger düyməsi */}
-  <div className="nav-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-    <div className="logo">
-      <img src="/woodpecker.jpg" alt="Logo" style={{ height: '45px', width: 'auto' }} />
-    </div>
+      <nav className="navbar">
+        {/* Sol Hissə: Loqo və Hamburger düyməsi */}
+        <div className="nav-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="logo" onClick={() => scrollToSection('top')} style={{ cursor: 'pointer' }}>
+            <img src="/woodpecker.jpg" alt="Logo" style={{ height: '45px', width: 'auto' }} />
+          </div>
 
-    {/* Mobil üçün Hamburger Düyməsi (☰ / ✕) */}
-    <button 
-      className="hamburger-btn" 
-      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-    >
-      {isMobileMenuOpen ? '✕' : '☰'}
-    </button>
-  </div>
+          <button 
+            className="hamburger-btn" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+        </div>
 
-  {/* Menyu Linkləri */}
-  <ul className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
-    <li><a href="#home" onClick={() => setIsMobileMenuOpen(false)}>Ana Səhifə</a></li>
-    <li><a href="#about" onClick={() => setIsMobileMenuOpen(false)}>Biz Kimik?</a></li>
-    <li><a href="#products" onClick={() => setIsMobileMenuOpen(false)}>Məhsullar</a></li>
-    <li><a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Əlaqə</a></li>
-  </ul>
+        {/* Menyu Linkləri (Scroll Funksiyasına Bağlandı) */}
+        <ul className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
+          <li>
+            <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('top'); }}>
+              Ana Səhifə
+            </a>
+          </li>
+          <li>
+            <a href="#products" onClick={(e) => { e.preventDefault(); scrollToSection('products'); }}>
+              Məhsullar
+            </a>
+          </li>
+          <li>
+            <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>
+              Əlaqə
+            </a>
+          </li>
+        </ul>
 
-  {/* Sağ Hissə: Sifariş Et düyməsi */}
-  <button className="order-btn" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-    Sifariş Et
-  </button>
-</nav>
+        {/* Sağ Hissə: Sifariş Et düyməsi */}
+        <button className="order-btn" onClick={() => scrollToSection('contact')}>
+          Sifariş Et
+        </button>
+      </nav>
 
-      {/* 2. Giriş (Hero) Hissəsi */}
-      <section className="hero-fullscreen">
-  {/* Arxa fon videosu - src hissəsinə öz real videonun adını yaz */}
- <img src="/taxtadanshekil.jpg" alt="Arxa fon" className="bg-video-full" />
-  <div className="dark-overlay"></div>
+      {/* 2. Giriş (Hero / Biz Kimik) Hissəsi */}
+      <section className="hero-fullscreen" id="about">
+        <img src="/taxtadanshekil.jpg" alt="Arxa fon" className="bg-video-full" />
+        <div className="dark-overlay"></div>
 
-<div className="glass-content">
-  {/* 1-ci sətir: Lazer skan effektli zərif badge */}
-  <div className="hero-badge laser-scan-badge">
-     EKSKLÜZİV LAZER KƏSİM VƏ SUVENİRLƏR
-  </div>
+        <div className="glass-content">
+          <div className="hero-badge laser-scan-badge">
+            EKSKLÜZİV LAZER KƏSİM VƏ SUVENİRLƏR
+          </div>
 
-  <h1 className="hero-title">
-    {/* 2-ci sətir: Tünd rəngdən azad olunmuş, parlaq və interaktiv hərflər */}
-    <span className="line-two">
-      {"Siz hədiyyəniz qədər".split("").map((char, index) => (
-        <span key={index} className="hover-letter-gold">
-          {char === " " ? "\u00A0" : char}
-        </span>
-      ))}
-    </span>
-    <br />
-    
-    {/* 3-cü sətir: Lazer kəsim "orijinalsınız!" */}
-    <span className="laser-wrapper">
-      <span className="laser-text">orijinalsınız!</span>
-      <span className="laser-spark"></span>
-    </span>
-  </h1>
+          <h1 className="hero-title">
+            <span className="line-two">
+              {"Siz hədiyyəniz qədər".split("").map((char, index) => (
+                <span key={index} className="hover-letter-gold">
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              ))}
+            </span>
+            <br />
+            
+            <span className="laser-wrapper">
+              <span className="laser-text">orijinalsınız!</span>
+              <span className="laser-spark"></span>
+            </span>
+          </h1>
 
-  {/* 4-cü sətir: Bəyəndiyin interaktiv alt yazı */}
-  <p className="hero-subtitle">
-    {"Taxta və müasir materialların sintezi ilə hər bir detalı xüsusi diqqətlə işlənmiş fərdi hədiyyələr.".split("").map((char, index) => (
-      <span key={index} className="hover-letter">
-        {char === " " ? "\u00A0" : char}
-      </span>
-    ))}
-  </p>
-</div>
-  
-  <div className="scroll-indicator">
-    <div className="mouse">
-      <div className="wheel"></div>
-    </div>
-  </div>
-</section>
+          <p className="hero-subtitle">
+            {"Taxta və müasir materialların sintezi ilə hər bir detalı xüsusi diqqətlə işlənmiş fərdi hədiyyələr.".split("").map((char, index) => (
+              <span key={index} className="hover-letter">
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </p>
+        </div>
+        
+        <div className="scroll-indicator">
+          <div className="mouse">
+            <div className="wheel"></div>
+          </div>
+        </div>
+      </section>
 
       {/* 4. Məhsullar Kataloqu */}
       <section className="products-section" id="products">

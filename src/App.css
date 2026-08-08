@@ -854,3 +854,27 @@ body {
     gap: 8px !important;
   }
 }
+/* 1. Hər bir hərf span-nın söz ortasından qırılmasının qarşısını alırıq */
+.hover-letter-gold, 
+.hover-letter {
+  display: inline-block;
+  word-break: keep-all;
+}
+
+/* 2. Sözlərin parçalanmaması üçün hər sözü qoruyuruq */
+.word-span {
+  display: inline-block;
+  white-space: nowrap; /* Sözün ortasından sətir qırılmasını tam qadağan edir */
+}
+
+/* 3. Mobil ekranlar üçün şriftin avtomatik adaptasiyası (Responsive) */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 1.8rem !important; /* Mobildə başlığı bir az kiçildirik ki rahat sığsın */
+  }
+  
+  .hero-subtitle {
+    font-size: 0.9rem !important; /* Alt mətni də kiçildirik */
+    word-break: normal;
+  }
+}
